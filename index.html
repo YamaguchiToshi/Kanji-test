@@ -14,109 +14,121 @@
         rel="stylesheet">
 </head>
 
-<body>
-    <div class="background-animation">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+<main class="app-container">
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="theme-toggle-btn" aria-label="テーマ切り替え">
+        <svg id="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="theme-icon">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="theme-icon hidden">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+    <!-- 1. Setup View -->
+    <section id="setup-view" class="view active">
+        <header>
+            <h1>漢字テスト学習アプリ</h1>
+            <p>CSVファイルをドロップしてテストを開始します</p>
+        </header>
 
-    <main class="app-container">
-        <!-- 1. Setup View -->
-        <section id="setup-view" class="view active">
-            <header>
-                <h1>漢字テスト学習アプリ</h1>
-                <p>CSVファイルをドロップしてテストを開始します</p>
-            </header>
-
-            <div class="settings-panel glass-panel">
-                <div class="setting-item">
-                    <label class="toggle-switch">
-                        <span class="toggle-label">出題順をランダムにする (シャッフル)</span>
-                        <input type="checkbox" id="shuffle-toggle" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label for="voice-select" class="setting-label">音声 (Voice):</label>
-                    <div class="select-wrapper">
-                        <select id="voice-select" class="glass-select">
-                            <option value="">音声を読み込み中...</option>
-                        </select>
-                    </div>
-                </div>
+        <div class="settings-panel panel">
+            <div class="setting-item">
+                <label class="toggle-switch">
+                    <span class="toggle-label">出題順をランダムにする (シャッフル)</span>
+                    <input type="checkbox" id="shuffle-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
             </div>
-
-            <div id="drop-zone" class="drop-zone glass-panel">
-                <div class="drop-zone-content">
-                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <p class="drop-text">ここにCSVファイルをドラッグ＆ドロップ</p>
-                    <p class="drop-subtext">またはクリックしてファイルを選択</p>
-                    <input type="file" id="file-input" accept=".csv" class="hidden-input">
+            <div class="setting-item">
+                <label for="voice-select" class="setting-label">音声 (Voice):</label>
+                <div class="select-wrapper">
+                    <select id="voice-select" class="select-input">
+                        <option value="">音声を読み込み中...</option>
+                    </select>
                 </div>
             </div>
-            <div id="setup-error" class="error-message hidden"></div>
-        </section>
+        </div>
 
-        <!-- 2. Test View -->
-        <section id="test-view" class="view hidden">
-            <div class="progress-bar-container">
-                <div id="progress-bar" class="progress-bar"></div>
+        <div id="drop-zone" class="drop-zone panel">
+            <div class="drop-zone-content">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p class="drop-text">ここにCSVファイルをドラッグ＆ドロップ</p>
+                <p class="drop-subtext">またはクリックしてファイルを選択</p>
+                <input type="file" id="file-input" accept=".csv" class="hidden-input">
             </div>
+        </div>
+        <div id="setup-error" class="error-message hidden"></div>
+    </section>
 
-            <header class="test-header">
-                <div class="progress-text">問題 <span id="current-question-num">1</span> / <span
-                        id="total-questions">10</span></div>
-                <div class="score-text">正解: <span id="current-score">0</span></div>
-            </header>
+    <!-- 2. Test View -->
+    <section id="test-view" class="view hidden">
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
 
-            <div class="question-container glass-panel">
-                <h2 id="question-text" class="question-reading">--</h2>
-                <button class="play-audio-btn" id="read-question-btn" title="問題を読み上げる" aria-label="問題を読み上げる">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    </svg>
-                </button>
+        <header class="test-header">
+            <div class="progress-text">問題 <span id="current-question-num">1</span> / <span
+                    id="total-questions">10</span></div>
+            <div class="score-text">正解: <span id="current-score">0</span></div>
+        </header>
+
+        <div class="question-container panel">
+            <h2 id="question-text" class="question-reading">--</h2>
+            <button class="play-audio-btn" id="read-question-btn" title="問題を読み上げる" aria-label="問題を読み上げる">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div id="choices-container" class="choices-container">
+            <!-- Choices will be injected here by JS -->
+        </div>
+
+        <div class="action-container">
+            <button id="answer-btn" class="primary-btn base-btn" disabled>回答する</button>
+        </div>
+    </section>
+
+    <!-- 3. Result View -->
+    <section id="result-view" class="view hidden">
+        <div class="result-header panel">
+            <h2>テスト完了！</h2>
+            <div class="final-score">
+                <span id="final-score-correct">0</span> / <span id="final-score-total">0</span>
             </div>
+            <p id="score-message" class="score-message">素晴らしい！</p>
+            <button id="retry-btn" class="primary-btn base-btn mt-4">もう一度やる</button>
+        </div>
 
-            <div id="choices-container" class="choices-container">
-                <!-- Choices will be injected here by JS -->
+        <div class="review-section mt-6">
+            <button id="toggle-review-btn" class="secondary-btn base-btn w-full">間違えた問題を確認する <span
+                    id="review-chevron">▼</span></button>
+            <div id="review-list" class="review-list hidden">
+                <!-- Review items will be injected here -->
             </div>
+        </div>
+    </section>
+</main>
 
-            <div class="action-container">
-                <button id="answer-btn" class="primary-btn glass-btn" disabled>回答する</button>
-            </div>
-        </section>
-
-        <!-- 3. Result View -->
-        <section id="result-view" class="view hidden">
-            <div class="result-header glass-panel">
-                <h2>テスト完了！</h2>
-                <div class="final-score">
-                    <span id="final-score-correct">0</span> / <span id="final-score-total">0</span>
-                </div>
-                <p id="score-message" class="score-message">素晴らしい！</p>
-                <button id="retry-btn" class="primary-btn glass-btn mt-4">もう一度やる</button>
-            </div>
-
-            <div class="review-section mt-6">
-                <button id="toggle-review-btn" class="secondary-btn glass-btn w-full">間違えた問題を確認する <span
-                        id="review-chevron">▼</span></button>
-                <div id="review-list" class="review-list hidden">
-                    <!-- Review items will be injected here -->
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 
 </html>

@@ -254,7 +254,7 @@ function renderQuestion() {
     selectedChoiceText = null;
     answerBtn.disabled = true;
     answerBtn.textContent = '回答する';
-    answerBtn.className = 'primary-btn glass-btn'; // Reset classes
+    answerBtn.className = 'primary-btn base-btn'; // Reset classes
 
     const q = questions[currentQuestionIndex];
 
@@ -277,7 +277,7 @@ function renderQuestion() {
 
     currentChoices.forEach(choice => {
         const btn = document.createElement('button');
-        btn.className = 'glass-btn choice-btn';
+        btn.className = 'base-btn choice-btn';
         btn.textContent = choice;
 
         // Handle selection and audio
@@ -414,3 +414,37 @@ retryBtn.addEventListener('click', () => {
     fileInput.value = '';
     switchView(resultView, setupView);
 });
+
+// --- Theme Toggle Logic ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const moonIcon = document.getElementById('moon-icon');
+const sunIcon = document.getElementById('sun-icon');
+
+// Check saved theme or system preference
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+const setTheme = (theme) => {
+    document.body.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+    } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+    }
+};
+
+if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    setTheme('dark');
+} else {
+    setTheme('light');
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    const currentTheme = document.body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+});
+
