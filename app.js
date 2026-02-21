@@ -30,7 +30,7 @@ const voiceSelect = document.getElementById('voice-select');
 let questions = [];
 let currentQuestionIndex = 0;
 let correctCount = 0;
-let mistakes = []; // { questionData, userAnswer }
+let results = []; // { questionData, userAnswer, isCorrect }
 let selectedChoiceText = null;
 let currentChoices = []; // Randomized choices for the current question
 let isAnswered = false;
@@ -230,7 +230,7 @@ function speakText(text) {
 function startTest() {
     currentQuestionIndex = 0;
     correctCount = 0;
-    mistakes = [];
+    results = [];
 
     totalQuestionsEl.textContent = questions.length;
     switchView(setupView, testView);
@@ -325,12 +325,13 @@ answerBtn.addEventListener('click', () => {
     if (isCorrect) {
         correctCount++;
         currentScoreEl.textContent = correctCount;
-    } else {
-        mistakes.push({
-            questionData: q,
-            userAnswer: selectedChoiceText
-        });
     }
+
+    results.push({
+        questionData: q,
+        userAnswer: selectedChoiceText,
+        isCorrect: isCorrect
+    });
 
     // Add visual feedback classes
     choiceBtns.forEach(btn => {
@@ -378,20 +379,26 @@ function showResult() {
 
     // Render Review List
     reviewList.innerHTML = '';
-    if (mistakes.length === 0) {
+    if (results.length === 0) {
         toggleReviewBtn.classList.add('hidden');
     } else {
         toggleReviewBtn.classList.remove('hidden');
-        mistakes.forEach(mistake => {
+        results.forEach((result, index) => {
             const item = document.createElement('div');
-            item.className = 'review-item';
+            item.className = `review-item ${result.isCorrect ? 'correct-item' : 'incorrect-item'}`;
+
+            let statusBadge = result.isCorrect
+                ? '<span class="status-badge correct-badge">正解</span>'
+                : '<span class="status-badge incorrect-badge">不正解</span>';
+
             item.innerHTML = `
                 <div class="target">
-                    <span>${mistake.questionData.katakana}</span>
-                    <span class="kanji">(${mistake.questionData.kanji})</span>
+                    <span>Q${index + 1}. ${result.questionData.katakana}</span>
+                    <span class="kanji">(${result.questionData.kanji})</span>
+                    ${statusBadge}
                 </div>
-                <div class="correct-ans">正解: ${mistake.questionData.correct}</div>
-                <div class="user-ans">あなたの回答: ${mistake.userAnswer}</div>
+                <div class="correct-ans">正解: ${result.questionData.correct}</div>
+                ${!result.isCorrect ? `<div class="user-ans">あなたの回答: ${result.userAnswer}</div>` : ''}
             `;
             reviewList.appendChild(item);
         });

@@ -70,7 +70,7 @@ body {
 
 /* Theme Toggle */
 .theme-toggle-btn {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
     background: transparent;
@@ -83,7 +83,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: background-color var(--transition-fast), color var(--transition-fast);
-    z-index: 10;
+    z-index: 1000;
 }
 
 .theme-toggle-btn:hover {
@@ -597,7 +597,33 @@ input:checked+.slider:before {
     padding: 16px;
     background-color: var(--bg-color);
     border-radius: var(--border-radius-sm);
-    border-left: 4px solid var(--error-color);
+    border-left: 4px solid transparent;
+}
+
+.review-item.correct-item {
+    border-left-color: var(--success-color);
+}
+
+.review-item.incorrect-item {
+    border-left-color: var(--error-color);
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: auto;
+    font-weight: 700;
+}
+
+.correct-badge {
+    background-color: var(--success-bg);
+    color: var(--success-color);
+}
+
+.incorrect-badge {
+    background-color: var(--error-bg);
+    color: var(--error-color);
 }
 
 .review-item .target {
