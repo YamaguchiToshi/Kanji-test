@@ -567,6 +567,25 @@ input:checked+.slider:before {
     width: 100%;
 }
 
+.text-center {
+    text-align: center;
+}
+
+.sample-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.secondary-btn {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+.secondary-btn:hover {
+    background-color: var(--border-color);
+}
+
 /* Result View */
 .result-header {
     text-align: center;

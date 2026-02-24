@@ -7,6 +7,7 @@ const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const setupError = document.getElementById('setup-error');
 const shuffleToggle = document.getElementById('shuffle-toggle');
+const sampleBtn = document.getElementById('sample-btn');
 
 const progressBar = document.getElementById('progress-bar');
 const currentQuestionNumEl = document.getElementById('current-question-num');
@@ -92,6 +93,31 @@ function showError(message) {
     setupError.textContent = message;
     setupError.classList.remove('hidden');
 }
+
+// Handle Sample Button Click
+sampleBtn.addEventListener('click', async () => {
+    setupError.classList.add('hidden');
+    // Disable button to prevent multiple clicks
+    const originalText = sampleBtn.textContent;
+    sampleBtn.textContent = '読み込み中...';
+    sampleBtn.disabled = true;
+
+    try {
+        const response = await fetch('sample.csv');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const text = await response.text();
+        parseCSV(text);
+        startTest();
+    } catch (error) {
+        showError('サンプルファイルの読み込みに失敗しました。「sample.csv」が同じフォルダに存在するか確認してください。');
+        console.error('Error fetching sample CSV:', error);
+    } finally {
+        sampleBtn.textContent = originalText;
+        sampleBtn.disabled = false;
+    }
+});
 
 function parseCSV(text) {
     // Basic CSV parsing. Assumes no quoted commas within the fields for this specific app format.
@@ -302,14 +328,14 @@ function renderQuestion() {
 
 // Question reading button
 readQuestionBtn.addEventListener('click', () => {
-    // Read the "Kanji" field for accurate pronunciation, despite showing Katakana
+    // Read the "Katakana" field as requested by the user
     const q = questions[currentQuestionIndex];
-    speakText(q.kanji);
+    speakText(q.katakana);
 });
 
 questionTextEl.addEventListener('click', () => {
     const q = questions[currentQuestionIndex];
-    speakText(q.kanji);
+    speakText(q.katakana);
 });
 
 // Answer Button Logic
