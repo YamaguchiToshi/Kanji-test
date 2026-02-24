@@ -394,7 +394,7 @@ function showResult() {
 
     const accuracy = correctCount / questions.length;
     if (accuracy === 1) {
-        scoreMessageEl.textContent = '全問正解！完璧です！🎌';
+        scoreMessageEl.textContent = '全問正解！完璧です！🎊';
     } else if (accuracy >= 0.8) {
         scoreMessageEl.textContent = '素晴らしい成績です！🌟';
     } else if (accuracy >= 0.5) {
